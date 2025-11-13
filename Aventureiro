@@ -1,0 +1,70 @@
+#include <stdio.h>
+
+#define TAMANHO 10   // Tamanho fixo do tabuleiro 10x10
+#define NAVIO 3      // Valor que representa uma parte de navio
+#define TAM_NAVIO 3  // Tamanho fixo dos navios
+
+// Função auxiliar para verificar se há sobreposição
+int temSobreposicao(int tabuleiro[TAMANHO][TAMANHO], int linha, int coluna) {
+    return tabuleiro[linha][coluna] == NAVIO;
+}
+
+int main() {
+    int tabuleiro[TAMANHO][TAMANHO];
+
+    // 1. Inicializa o tabuleiro com água (0)
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
+
+    // =========================
+    // 2. Coordenadas iniciais
+    // =========================
+
+    // Navio 1 - Horizontal
+    int linhaH = 2, colunaH = 1;
+
+    // Navio 2 - Vertical
+    int linhaV = 5, colunaV = 4;
+
+    // Navio 3 - Diagonal principal (↘) — linha e coluna aumentam juntos
+    int linhaD1 = 0, colunaD1 = 0;
+
+    // Navio 4 - Diagonal secundária (↙) — linha aumenta e coluna diminui
+    int linhaD2 = 0, colunaD2 = 9;
+
+    // =========================
+    // 3. Posicionamento dos navios
+    // =========================
+
+    // --- Navio 1: horizontal (→)
+    if (colunaH + TAM_NAVIO <= TAMANHO) {
+        for (int j = 0; j < TAM_NAVIO; j++) {
+            if (temSobreposicao(tabuleiro, linhaH, colunaH + j)) {
+                printf("Erro: sobreposição detectada (navio horizontal)\n");
+                return 1;
+            }
+            tabuleiro[linhaH][colunaH + j] = NAVIO;
+        }
+    } else {
+        printf("Erro: navio horizontal fora do limite!\n");
+        return 1;
+    }
+
+    // --- Navio 2: vertical (↓)
+    if (linhaV + TAM_NAVIO <= TAMANHO) {
+        for (int i = 0; i < TAM_NAVIO; i++) {
+            if (temSobreposicao(tabuleiro, linhaV + i, colunaV)) {
+                printf("Erro: sobreposição detectada (navio vertical)\n");
+                return 1;
+            }
+            tabuleiro[linhaV + i][colunaV] = NAVIO;
+        }
+    } else {
+        printf("Erro: navio vertical fora do limite!\n");
+        return 1;
+    }
+
+    // ---
